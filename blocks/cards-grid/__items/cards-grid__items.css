@@ -1,0 +1,6 @@
+.cards-grid__items {
+    display: flex;
+    flex-direction: column;
+    background-color: #FFF;
+    border-radius: 10px;
+}
