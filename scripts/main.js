@@ -1,37 +1,28 @@
-let openPopup = document.querySelector('.profile__edit-button');
+let openPopupButton = document.querySelector('.profile__edit-button');
 let popup = document.querySelector('.popup');
-let closePopup = popup.querySelector('.popup__cross');
+let closePopupButton = popup.querySelector('.popup__cross');
 
 let form = document.querySelector('.popup__form');
-let formName = form.querySelector('.popup__input_name');
-let formJob = form.querySelector('.popup__input_job');
+let formName = form.querySelector('.popup_input_name');
+let formJob = form.querySelector('.popup_input_job');
 
 let profileName = document.querySelector('.profile__name');
 let profileJob = document.querySelector('.profile__occupation');
 
-//строки формы будут заполнены инфой из профиля
-formName.value = profileName.textContent;
-formJob.value = profileJob.textContent;
 
-//вызываем функции
-openPopup.addEventListener('click', openClick);
-closePopup.addEventListener('click', crossClick);
-// Прикрепляем обработчик к форме:
-// он будет следить за событием “submit” - «отправка»
-form.addEventListener('submit', handleFormSubmit); 
 
-function openClick() {
-    popup.classList.add('popup__opened');
+
+function openPopup() {
+    popup.classList.add('popup_opened');
+
+    //строки попапа будут заполнены инфой из профиля
+    formName.value = profileName.textContent;
+    formJob.value = profileJob.textContent;
   }
   
 
-
-function crossClick() {
-    popup.classList.remove('popup__opened');
-
-    //несохранённый текст сбрасывается из формы при нажатии на крестик
-    formName.value = profileName.textContent;
-    formJob.value = profileJob.textContent;
+function closePopup() {
+    popup.classList.remove('popup_opened');
   }
  
 
@@ -46,9 +37,14 @@ function handleFormSubmit (evt) {
     profileName.textContent = formName.value;
     profileJob.textContent = formJob.value;
 
-    popup.classList.remove('popup__opened');
+    closePopup();
     //для закрытия окна после нажатия на отправку формы
 }
 
 
-
+//вызываем функции
+openPopupButton.addEventListener('click', openPopup);
+closePopupButton.addEventListener('click', closePopup);
+// Прикрепляем обработчик к форме:
+// он будет следить за событием “submit” - «отправка»
+form.addEventListener('submit', handleFormSubmit); 

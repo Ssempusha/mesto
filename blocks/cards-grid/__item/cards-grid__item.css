@@ -1,4 +1,4 @@
-.cards-grid__items {
+.cards-grid__item {
     display: flex;
     flex-direction: column;
     background-color: #FFF;
