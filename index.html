@@ -30,53 +30,6 @@
 
             <section class="places">
                 <ul class="cards-grid">
-                    <li class="cards-grid__item">
-                        <img class="cards-grid__image" src="./images/photo-grid/karachaevo.jpg" alt="Карачевск">
-                        <div class="cards-grid__elements-box">
-                            <h2 class="cards-grid__title">Карачевск</h2>
-                            <button type="button" class="cards-grid__like"></button>
-                        </div>
-                    </li>
-
-                    <li class="cards-grid__item">
-                        <img class="cards-grid__image" src="./images/photo-grid/elbrus.jpg" alt="Эльбрус">
-                        <div class="cards-grid__elements-box">
-                            <h2 class="cards-grid__title">Гора Эльбрус</h2>
-                            <button type="button" class="cards-grid__like"></button>
-                        </div>
-                    </li>
-                    
-                    <li class="cards-grid__item">
-                        <img class="cards-grid__image" src="./images/photo-grid/dombai.jpg" alt="Домбай">
-                        <div class="cards-grid__elements-box">
-                            <h2 class="cards-grid__title">Домбай</h2>
-                            <button type="button" class="cards-grid__like"></button>
-                        </div>
-                    </li>
-
-                    <li class="cards-grid__item">
-                        <img class="cards-grid__image" src="./images/photo-grid/elbrus.jpg" alt="Эльбрус">
-                        <div class="cards-grid__elements-box">
-                            <h2 class="cards-grid__title">Гора Эльбрус</h2>
-                            <button type="button" class="cards-grid__like"></button>
-                        </div>
-                    </li>
-
-                    <li class="cards-grid__item">
-                        <img class="cards-grid__image" src="./images/photo-grid/dombai.jpg" alt="Домбай">
-                        <div class="cards-grid__elements-box">
-                            <h2 class="cards-grid__title">Домбай</h2>
-                            <button type="button" class="cards-grid__like"></button>
-                        </div>
-                    </li>
-
-                    <li class="cards-grid__item">
-                        <img class="cards-grid__image" src="./images/photo-grid/karachaevo.jpg" alt="Карачаево-Черкесия">
-                        <div class="cards-grid__elements-box">
-                            <h2 class="cards-grid__title">Карачаево-Черкесия</h2>
-                            <button type="button" class="cards-grid__like"></button>
-                        </div>
-                    </li>
                 </ul>
             </section>
         </main>
@@ -84,6 +37,18 @@
         <footer class="footer">
             <p class="footer__copyright">&#169; 2023 Mesto Russia</p>
         </footer>
+
+        <template class="template-card">
+            <li class="cards-grid__item">
+                <img class="cards-grid__image" src="" alt="">
+                <button type="button" class="cards-grid__delete"></button>
+                <div class="cards-grid__elements-box">
+                    <h2 class="cards-grid__title"></h2>
+                    <button type="button" class="cards-grid__like"></button>
+                </div>
+            </li>
+        </template>
+
 
         <div class="popup">
             <div class="popup__container">
@@ -94,6 +59,28 @@
                         <button type="submit" class="popup__button-save">Сохранить</button>
                     </form>
                     <button type="button" class="popup__cross"></button>
+            </div>
+        </div>
+
+        <div class="popup popup_addin-card">
+            <div class="popup__container">
+                    <h2 class="popup__title">Новое место</h2>
+                    <form class="popup__form popup__form-adding" name="poputAdd">
+                        <input class="popup__input popup__input_type_place" type="text" placeholder="Название" value="" name="placeName">
+                        <input class="popup__input popup__input_type_link" type="text" placeholder="Ссылка на картинку" value="" name="linkImage">
+                        <button type="submit" class="popup__button-save">Создать</button>
+                    </form>
+                    <button type="button" class="popup__cross"></button>
+            </div>
+        </div>
+
+        <div class="popup popup_open-image">
+            <div class="popup__open-image-container">
+                    <button type="button" class="popup__cross"></button>
+                    <figure class="popup__figure">
+                        <img class="popup__image" src="#" alt="">
+                        <figcaption class="popup__figcaption"></figcaption>
+                    </figure>
             </div>
         </div>
     </div>
