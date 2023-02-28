@@ -2,9 +2,9 @@ const profileOpenButton = document.querySelector('.profile__edit-button');
 const profilePopup = document.querySelector('.popup');
 const profileCloseButton = document.querySelectorAll('.popup__cross');
 
-const profileForm = document.forms["poputEdit"];
-const formName = profileForm.querySelector('.popup__input_type_name');
-const formJob = profileForm.querySelector('.popup__input_type_job');
+const profileForm = document.forms.poputEdit;
+const formName = profileForm.elements.userName;
+const formJob = profileForm.elements.userJob;
 
 const profileName = document.querySelector('.profile__name');
 const profileJob = document.querySelector('.profile__occupation');
@@ -12,7 +12,7 @@ const profileJob = document.querySelector('.profile__occupation');
 //вызываем из html пустой список
 const cardList = document.querySelector('.cards-grid');
 //вызываем из html форму для сохранения юзером новой уникальной карточки
-const formNewCard = document.forms["poputAdd"];
+const formNewCard = document.forms.poputAdd;
 //вызываем из html template блок
 const templateCard = document.querySelector('.template-card');
 
@@ -23,18 +23,35 @@ const popupFigcaption = popupOpenImage.querySelector('.popup__figcaption');
 const openPopupButtonAddingCard = document.querySelector('.profile__add-button');
 const popupAddingCard = document.querySelector('.popup_addin-card');
 
-const popupPlace = formNewCard.querySelector('.popup__input_type_place');
-const popupLink = formNewCard.querySelector('.popup__input_type_link');
+const popupPlace = formNewCard.elements.placeName;
+const popupLink = formNewCard.elements.linkImage;
 
 
 //универсальное закрытие любого попапа на крестик
 const closePopup = (profilePopup) => {
   profilePopup.classList.remove('popup_opened');
 };
-//универсальное открытие любого попапа
+
+//универсальное открытие любого попапа с доп. функционалом
 const openPopup = (profilePopup) => {
   profilePopup.classList.add('popup_opened');
+   //закрытие на esc
+  const closePopupEscape = (evt) => {
+  if (evt.key ==='Escape') {
+    closePopup(profilePopup);
+    document.removeEventListener('keydown', closePopupEscape);
+  }
 };
+document.addEventListener('keydown', closePopupEscape);
+
+  //закрытие кликом на фон
+  const handleDverlyClick = (evt) => {
+    if (evt.target === profilePopup)
+    closePopup(profilePopup);
+  }
+profilePopup.addEventListener('click', handleDverlyClick);
+};
+
 
 const openPopupProfile = () => {
     //строки попапа будут заполнены инфой из профиля
