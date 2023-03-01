@@ -3,8 +3,8 @@ const profilePopup = document.querySelector('.popup');
 const profileCloseButton = document.querySelectorAll('.popup__cross');
 
 const profileForm = document.forms.poputEdit;
-const formName = profileForm.elements.userName;
-const formJob = profileForm.elements.userJob;
+const profileFormNameInput = profileForm.elements.userName;
+const profileFormJobInput = profileForm.elements.userJob;
 
 const profileName = document.querySelector('.profile__name');
 const profileJob = document.querySelector('.profile__occupation');
@@ -23,71 +23,8 @@ const popupFigcaption = popupOpenImage.querySelector('.popup__figcaption');
 const openPopupButtonAddingCard = document.querySelector('.profile__add-button');
 const popupAddingCard = document.querySelector('.popup_addin-card');
 
-const popupPlace = formNewCard.elements.placeName;
-const popupLink = formNewCard.elements.linkImage;
-
-
-//универсальное закрытие любого попапа на крестик
-const closePopup = (profilePopup) => {
-  profilePopup.classList.remove('popup_opened');
-};
-
-//универсальное открытие любого попапа с доп. функционалом
-const openPopup = (profilePopup) => {
-  profilePopup.classList.add('popup_opened');
-   //закрытие на esc
-  const closePopupEscape = (evt) => {
-  if (evt.key ==='Escape') {
-    closePopup(profilePopup);
-    document.removeEventListener('keydown', closePopupEscape);
-  }
-};
-document.addEventListener('keydown', closePopupEscape);
-
-  //закрытие кликом на фон
-  const handleDverlyClick = (evt) => {
-    if (evt.target === profilePopup)
-    closePopup(profilePopup);
-  }
-profilePopup.addEventListener('click', handleDverlyClick);
-};
-
-
-const openPopupProfile = () => {
-    //строки попапа будут заполнены инфой из профиля
-    formName.value = profileName.textContent;
-    formJob.value = profileJob.textContent;
-    //открытие попапа
-    openPopup(profilePopup);
-  };
-  
-/* Обработчик «отправки» формы, который пока ещё не отправляется на сервер */
-const handleProfileFormSubmit = (evt) => {
-    evt.preventDefault();
-    // получаем значение полей formJob и formName из свойства value и выбираем элементы, куда должны быть вставлены значения полей
-    profileName.textContent = formName.value;
-    profileJob.textContent = formJob.value;
-
-    //для закрытия окна после нажатия на отправку формы
-    closePopup(profilePopup);
-};
-
-
-//вызываем функциию открытия попапа
-profileOpenButton.addEventListener('click', openPopupProfile);
-//прикрепляем обработчик к форме, он будет следить за событием “submit” - «отправка»
-profileForm.addEventListener('submit', handleProfileFormSubmit); 
-
-//универсальный обработчик ВСЕХ крестиков на странице
-profileCloseButton.forEach((button) => {
-  // находим 1 раз ближайший к крестику попап 
-  const popup = button.closest('.popup');
-  // устанавливаем обработчик закрытия на крестик
-  button.addEventListener('click', () => closePopup(popup));
-});
-
-
-/* --------------------ПР5------------------------- */
+const formNewCardPlaceInput = formNewCard.elements.placeName;
+const formNewCardLinkInput = formNewCard.elements.linkImage;
 
 const initialCards = [
   {
@@ -117,7 +54,78 @@ const initialCards = [
 ];
 
 
-const addCards = (titleValue, linkValue) => {
+//универсальное закрытие любого попапа на крестик
+const closePopup = (popup) => {
+  popup.classList.remove('popup_opened');
+  document.removeEventListener('keydown', closePopupByEscape);
+  popup.removeEventListener('click', closePopupByBackgroundClick);
+};
+
+//универсальное закрытие на esc
+function closePopupByEscape(evt) {
+  if (evt.key === "Escape") {
+    const openedPopup = document.querySelector('.popup_opened');
+    closePopup(openedPopup); 
+  }
+};
+
+//универсальное закрытие кликом на фон
+  function closePopupByBackgroundClick(evt) {
+    if (evt.target.classList.contains('popup')){
+      const openedPopup = document.querySelector('.popup_opened');
+      closePopup(openedPopup);
+    }
+};
+
+//универсальное открытие любого попапа с доп. функционалом
+const openPopup = (popup) => {
+  popup.classList.add('popup_opened');
+   //вызов закрытия на esc
+  document.addEventListener('keydown', closePopupByEscape);
+  //вызов закрытия кликом на фон
+  popup.addEventListener('click', closePopupByBackgroundClick);
+};
+
+
+const openPopupProfile = () => {
+    //строки попапа будут заполнены инфой из профиля
+    profileFormNameInput.value = profileName.textContent;
+    profileFormJobInput.value = profileJob.textContent;
+    //открытие попапа
+    openPopup(profilePopup);
+  };
+  
+/* Обработчик «отправки» формы, который пока ещё не отправляется на сервер */
+const handleProfileFormSubmit = (evt) => {
+    evt.preventDefault();
+    // получаем значение полей formJob и formName из свойства value и выбираем элементы, куда должны быть вставлены значения полей
+    profileName.textContent = profileFormNameInput.value;
+    profileJob.textContent = profileFormJobInput.value;
+
+    //для закрытия окна после нажатия на отправку формы
+    closePopup(profilePopup);
+    //сброс для кнопки создания карточки, чтобы она задизейблилась
+    evt.target.reset();
+};
+
+
+//вызываем функциию открытия попапа
+profileOpenButton.addEventListener('click', openPopupProfile);
+//прикрепляем обработчик к форме, он будет следить за событием “submit” - «отправка»
+profileForm.addEventListener('submit', handleProfileFormSubmit); 
+
+//универсальный обработчик ВСЕХ крестиков на странице
+profileCloseButton.forEach((button) => {
+  // находим 1 раз ближайший к крестику попап 
+  const popup = button.closest('.popup');
+  // устанавливаем обработчик закрытия на крестик
+  button.addEventListener('click', () => closePopup(popup));
+});
+
+
+/* --------------------ПР5------------------------- */
+
+const createCard = (titleValue, linkValue) => {
   //клонируем контент
   const templateCardClone = templateCard.content.cloneNode(true);
   //находим поле куда будет вставляться название места, и присваиваем ему значение которое введёт юзер
@@ -156,7 +164,7 @@ const addCards = (titleValue, linkValue) => {
 
 /* --------обрабортка массива-------- */
 initialCards.forEach((card) => {
-  const finalCard = addCards(card.name, card.link);
+  const finalCard = createCard(card.name, card.link);
   cardList.append(finalCard);
 })
 
@@ -174,7 +182,8 @@ const openPopupAddinCard = () => {
 const handleCardFormSubmit = (evt) => {
   evt.preventDefault();
 
-  const finalCardd = addCards(popupPlace.value, popupLink.value);
+  const finalCardd = createCard(formNewCardPlaceInput.value, formNewCardLinkInput.value);
+  //карточка будет добавляться в начало
   cardList.prepend(finalCardd);
 
   //для закрытия окна после нажатия на отправку формы
