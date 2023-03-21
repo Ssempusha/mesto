@@ -9,14 +9,13 @@ const enableValidationConfig = {
 };
 
 class FormValidator {
-    constructor(form, config) {
+    constructor(config) {
         this._formSelector = config.formSelector;
         this._inputSelector = config.inputSelector;
         this._submitButtonSelector = config.submitButtonSelector;
         this._inactiveButtonClass = config.inactiveButtonClass;
         this._templateSelector = config.templateSelector;
         this._inputErrorClass = config.inputErrorClass;
-        this._form = form;
     }
 
     _toggleButton = (form, config) => {

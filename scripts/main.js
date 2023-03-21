@@ -160,5 +160,5 @@ const handleCardFormSubmit = (evt) => {
 openPopupButtonAddingCard.addEventListener('click', openPopupAddinCard);
 formNewCard.addEventListener('submit', handleCardFormSubmit);
 //вызов класса с валидацией
-const validationForms = new FormValidator(profileForm, enableValidationConfig);
+const validationForms = new FormValidator(enableValidationConfig);
 validationForms.enableValidation();
