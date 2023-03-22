@@ -8,7 +8,6 @@ const profileCloseButton = document.querySelectorAll('.popup__cross');
 const profileForm = document.forms.poputEdit;
 const profileFormNameInput = profileForm.elements.userName;
 const profileFormJobInput = profileForm.elements.userJob;
-const buttonSubmitProfileForm = profileForm.querySelector('.popup__button-save');
 
 const profileName = document.querySelector('.profile__name');
 const profileJob = document.querySelector('.profile__occupation');
@@ -40,32 +39,16 @@ const closePopupByEscape = (evt) => {
 
 //универсальное закрытие кликом на фон
 const closePopupByBackgroundClick = (evt) => {
-    if (evt.target.classList.contains('popup')){
-      const openedPopup = document.querySelector('.popup_opened');
-      closePopup(openedPopup);
-    }
+  if (evt.target.classList.contains('popup')){
+    const openedPopup = document.querySelector('.popup_opened');
+    closePopup(openedPopup);
+  }
 };
 
 //универсальное закрытие любого попапа на крестик
 const closePopup = (popup) => {
   popup.classList.remove('popup_opened');
   document.removeEventListener('keydown', closePopupByEscape);
-};
-
-//функция ресета ошибок в span
-const resetSpanError = () => {
-    const spanList = Array.from(document.querySelectorAll('.popup__error-input'));
-    spanList.forEach((span) => {
-      span.textContent = '';
-  });
-  };
-
-//функция ресета красной обводки инпута
-const resetBorderInput = () => {
-  const inputsList =  Array.from(document.querySelectorAll('.popup__input'));
-  inputsList.forEach((input) => {
-    input.classList.remove(enableValidationConfig.inputErrorClass);
-  });
 };
 
 //универсальное открытие любого попапа с доп. функционалом
@@ -79,28 +62,25 @@ const openPopup = (popup) => {
 
 //открытие попапа редактирования профиля
 const openPopupProfile = () => {
-    //строки попапа будут заполнены инфой из профиля
-    profileFormNameInput.value = profileName.textContent;
-    profileFormJobInput.value = profileJob.textContent;
-    //открытие попапа
-    openPopup(profilePopup);
-    //сброс ошибок валидации с прошлых вводов юзера
-    resetSpanError();
-    resetBorderInput();
-    //дизейбл кнопки сабмита попапа редактирования профиля
-    buttonSubmitProfileForm.classList.remove('popup__button-save_disabled');
-    buttonSubmitProfileForm.disabled = false;
-  };
+  //строки попапа будут заполнены инфой из профиля
+  profileFormNameInput.value = profileName.textContent;
+  profileFormJobInput.value = profileJob.textContent;
+  //вызываем класс валидации
+  const validationProfileForm = new FormValidator(profileForm, enableValidationConfig);
+  validationProfileForm.enableValidation();
+  //открытие попапа
+  openPopup(profilePopup);
+};
   
 /* Обработчик «отправки» формы, который пока ещё не отправляется на сервер */
 const handleProfileFormSubmit = (evt) => {
-    evt.preventDefault();
-    // получаем значение полей formJob и formName из свойства value и выбираем элементы, куда должны быть вставлены значения полей
-    profileName.textContent = profileFormNameInput.value;
-    profileJob.textContent = profileFormJobInput.value;
+  evt.preventDefault();
+  // получаем значение полей formJob и formName из свойства value и выбираем элементы, куда должны быть вставлены значения полей
+  profileName.textContent = profileFormNameInput.value;
+  profileJob.textContent = profileFormJobInput.value;
 
-    //для закрытия окна после нажатия на отправку формы
-    closePopup(profilePopup);
+  //для закрытия окна после нажатия на отправку формы
+  closePopup(profilePopup);
 };
 
 
@@ -126,20 +106,27 @@ function openPopupOpenImage() {
   openPopup(popupOpenImage);
 };
 
+//универсальная функция генерирования карточек
+function generateCard(link, place) {
+  const card = new Card(link, place, templateCard, openPopupOpenImage);  
+  const cardElement = card.createCard();
+  return cardElement;
+}
+
 /* --------обрабортка и вывод заготовленного массива-------- */
-initialCards.forEach((card) => {
-  const finalCard = new Card(card.link, card.name, templateCard, openPopupOpenImage);
-  cardList.append(finalCard.createCard());
+initialCards.forEach((item) => {
+  //вызываем функцию генерации карточек с нужными параметрами
+  cardList.append(generateCard(item.link, item.name));
 })
 
 /* ----------настройка инпутов попапа добавления карточки----------- */
-//открытие попапа добавления карточки
+//функция открытия попапа добавления карточки
 const openPopupAddinCard = () => {
   //строки попапа при открытии будут пустыми, а кнопка задизейблена
   formNewCard.reset();
-  //сброс ошибок валидации с прошлых вводов юзера
-  resetSpanError();
-  resetBorderInput();
+  //вызываем класс валидации
+  const validationFormNewCard = new FormValidator(formNewCard, enableValidationConfig);
+  validationFormNewCard.enableValidation();
   //открытие попапа
   openPopup(popupAddingCard);
 };
@@ -148,9 +135,8 @@ const openPopupAddinCard = () => {
 const handleCardFormSubmit = (evt) => {
   evt.preventDefault();
 
-  const finalCard = new Card(formNewCardLinkInput.value, formNewCardPlaceInput.value, templateCard, openPopupOpenImage);
-  //карточка будет добавляться в начало
-  cardList.prepend(finalCard.createCard());
+  //вызываем функцию генерации карточек с нужными параметрами, карточка будет добавляться в начало
+  cardList.prepend(generateCard(formNewCardLinkInput.value, formNewCardPlaceInput.value));
 
   //для закрытия окна после нажатия на отправку формы
   closePopup(popupAddingCard);
@@ -159,6 +145,3 @@ const handleCardFormSubmit = (evt) => {
 /* ----------вызов функций----------- */
 openPopupButtonAddingCard.addEventListener('click', openPopupAddinCard);
 formNewCard.addEventListener('submit', handleCardFormSubmit);
-//вызов класса с валидацией
-const validationForms = new FormValidator(enableValidationConfig);
-validationForms.enableValidation();

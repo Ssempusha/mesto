@@ -9,24 +9,24 @@ const enableValidationConfig = {
 };
 
 class FormValidator {
-    constructor(config) {
+    constructor(form, config) {
         this._formSelector = config.formSelector;
         this._inputSelector = config.inputSelector;
         this._submitButtonSelector = config.submitButtonSelector;
         this._inactiveButtonClass = config.inactiveButtonClass;
         this._templateSelector = config.templateSelector;
         this._inputErrorClass = config.inputErrorClass;
+        this._button = form.querySelector(this._submitButtonSelector);
+        this._form = form;
     }
 
     _toggleButton = (form, config) => {
-        //находим кнопку без дизейбла
-        const buttonSubmit = form.querySelector(this._submitButtonSelector);
         //проверяем встроенной функцией валидна ли форма (тру/фолс)
         const ifFormValid = form.checkValidity();
         //если форма не валидна, то включаем ей дизейбл
-        buttonSubmit.disabled = !ifFormValid;
+        this._button.disabled = !ifFormValid;
         //добавляем стиль дизейбла кнопке, если форма не валидна, и убираем, если не валидна
-        buttonSubmit.classList.toggle(this._inactiveButtonClass, !ifFormValid);
+        this._button.classList.toggle(this._inactiveButtonClass, !ifFormValid);
         //при использовании в форме reset, сработает этот слушатель, чтобы задизейблить кнопку при повторном открытии попапа
         form.addEventListener('reset', () => {
             setTimeout(() => {
@@ -76,14 +76,27 @@ class FormValidator {
         //изначальная проверка кнопки, иначе если юзер не повзаимодействует с формой, то кнопка будет такой, как изначально в html
         this._toggleButton(form, config);
     }
+
+    //функция ресета красной обводки инпута при открытии попапа
+    _resetBorderInput = () => {
+        const inputsList =  Array.from(document.querySelectorAll('.popup__input'));
+        inputsList.forEach((input) => {
+          input.classList.remove(this._inputErrorClass);
+        });
+      };
+
+    //функция ресета ошибок в span при открытии попапа
+    _resetSpanError = () => {
+        const spanList = Array.from(document.querySelectorAll('.popup__error-input'));
+        spanList.forEach((span) => {
+        span.textContent = '';
+        });
+    };
     
-    
-    enableValidation = (config) => { 
-        //находим все формы на странице, и делаем их массивом
-        const formList = Array.from(document.querySelectorAll(this._formSelector));
-        //перебираем формы и навешиваем на них функцию
-        formList.forEach((form) => {
-            this._validationConfig(form, config)
-      });
+    enableValidation = (config) => {
+        //вызов валидации
+        this._validationConfig(this._form, config);
+        this._resetBorderInput();
+        this._resetSpanError();
     };
 }
