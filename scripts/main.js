@@ -29,6 +29,9 @@ const popupAddingCard = document.querySelector('.popup_addin-card');
 const formNewCardPlaceInput = formNewCard.elements.placeName;
 const formNewCardLinkInput = formNewCard.elements.linkImage;
 
+const validationProfileForm = new FormValidator(profileForm, enableValidationConfig);
+const validationFormNewCard = new FormValidator(formNewCard, enableValidationConfig);
+
 //универсальное закрытие на esc
 const closePopupByEscape = (evt) => {
   if (evt.key === "Escape") {
@@ -39,22 +42,22 @@ const closePopupByEscape = (evt) => {
 
 //универсальное закрытие кликом на фон
 const closePopupByBackgroundClick = (evt) => {
-  if (evt.target.classList.contains('popup')){
-    const openedPopup = document.querySelector('.popup_opened');
-    closePopup(openedPopup);
+  if (evt.target.classList.contains('popup')) {
+    closePopup(evt.target);
   }
 };
 
-//универсальное закрытие любого попапа на крестик
+//универсальное закрытие любого попапа
 const closePopup = (popup) => {
   popup.classList.remove('popup_opened');
   document.removeEventListener('keydown', closePopupByEscape);
+  popup.removeEventListener('click', closePopupByBackgroundClick);
 };
 
 //универсальное открытие любого попапа с доп. функционалом
 const openPopup = (popup) => {
   popup.classList.add('popup_opened');
-   //вызов закрытия на esc
+  //вызов закрытия на esc
   document.addEventListener('keydown', closePopupByEscape);
   //вызов закрытия кликом на фон
   popup.addEventListener('click', closePopupByBackgroundClick);
@@ -65,9 +68,6 @@ const openPopupProfile = () => {
   //строки попапа будут заполнены инфой из профиля
   profileFormNameInput.value = profileName.textContent;
   profileFormJobInput.value = profileJob.textContent;
-  //вызываем класс валидации
-  const validationProfileForm = new FormValidator(profileForm, enableValidationConfig);
-  validationProfileForm.enableValidation();
   //открытие попапа
   openPopup(profilePopup);
 };
@@ -78,16 +78,9 @@ const handleProfileFormSubmit = (evt) => {
   // получаем значение полей formJob и formName из свойства value и выбираем элементы, куда должны быть вставлены значения полей
   profileName.textContent = profileFormNameInput.value;
   profileJob.textContent = profileFormJobInput.value;
-
   //для закрытия окна после нажатия на отправку формы
   closePopup(profilePopup);
 };
-
-
-//вызываем функциию открытия попапа
-profileOpenButton.addEventListener('click', openPopupProfile);
-//прикрепляем обработчик к форме, он будет следить за событием “submit” - «отправка»
-profileForm.addEventListener('submit', handleProfileFormSubmit); 
 
 //универсальный обработчик ВСЕХ крестиков на странице
 profileCloseButton.forEach((button) => {
@@ -124,9 +117,6 @@ initialCards.forEach((item) => {
 const openPopupAddinCard = () => {
   //строки попапа при открытии будут пустыми, а кнопка задизейблена
   formNewCard.reset();
-  //вызываем класс валидации
-  const validationFormNewCard = new FormValidator(formNewCard, enableValidationConfig);
-  validationFormNewCard.enableValidation();
   //открытие попапа
   openPopup(popupAddingCard);
 };
@@ -134,14 +124,32 @@ const openPopupAddinCard = () => {
 /* ----------создание карточки при нажатии на сабмит----------- */
 const handleCardFormSubmit = (evt) => {
   evt.preventDefault();
-
   //вызываем функцию генерации карточек с нужными параметрами, карточка будет добавляться в начало
   cardList.prepend(generateCard(formNewCardLinkInput.value, formNewCardPlaceInput.value));
-
   //для закрытия окна после нажатия на отправку формы
   closePopup(popupAddingCard);
 };
 
-/* ----------вызов функций----------- */
-openPopupButtonAddingCard.addEventListener('click', openPopupAddinCard);
+/* ----------вызов валидации на формы----------- */
+validationProfileForm.enableValidation();
+validationFormNewCard.enableValidation();
+
+/* ----------слушатели----------- */
+//вызываем функциию открытия попапа редактирования профиля
+profileOpenButton.addEventListener('click', () => {
+  openPopupProfile();
+  //вызов валидации
+  validationProfileForm.resetValidation();
+  validationProfileForm.disableButton();
+});
+//прикрепляем обработчик к форме, он будет следить за событием “submit” - «отправка»
+profileForm.addEventListener('submit', handleProfileFormSubmit); 
+
+//вызываем функциию открытия попапа добавления карточки
+openPopupButtonAddingCard.addEventListener('click', () => {
+  openPopupAddinCard();
+  //вызов валидации
+  validationFormNewCard.resetValidation();
+});
+//обработчик submit попапа добавления карточки
 formNewCard.addEventListener('submit', handleCardFormSubmit);

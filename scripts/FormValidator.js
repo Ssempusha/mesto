@@ -6,6 +6,7 @@ const enableValidationConfig = {
     submitButtonSelector: '.popup__button-save',
     inactiveButtonClass: 'popup__button-save_disabled',
     inputErrorClass: 'popup__input_type_error',
+    spanSelector: '.popup__error-input',
 };
 
 class FormValidator {
@@ -16,7 +17,13 @@ class FormValidator {
         this._inactiveButtonClass = config.inactiveButtonClass;
         this._templateSelector = config.templateSelector;
         this._inputErrorClass = config.inputErrorClass;
-        this._button = form.querySelector(this._submitButtonSelector);
+        this._spanSelector = config.spanSelector;
+        //кнопка без стайла дизейбла
+        this._buttonSubmit = form.querySelector(this._submitButtonSelector);
+        //находим инпуты внутри формы и делалаем их массивом
+        this._inputsList = Array.from(form.querySelectorAll(this._inputSelector));
+        //находим спаны внутри формы и делалаем их массивом
+        this._spanList = Array.from(form.querySelectorAll(this._spanSelector));
         this._form = form;
     }
 
@@ -24,9 +31,9 @@ class FormValidator {
         //проверяем встроенной функцией валидна ли форма (тру/фолс)
         const ifFormValid = form.checkValidity();
         //если форма не валидна, то включаем ей дизейбл
-        this._button.disabled = !ifFormValid;
+        this._buttonSubmit.disabled = !ifFormValid;
         //добавляем стиль дизейбла кнопке, если форма не валидна, и убираем, если не валидна
-        this._button.classList.toggle(this._inactiveButtonClass, !ifFormValid);
+        this._buttonSubmit.classList.toggle(this._inactiveButtonClass, !ifFormValid);
         //при использовании в форме reset, сработает этот слушатель, чтобы задизейблить кнопку при повторном открытии попапа
         form.addEventListener('reset', () => {
             setTimeout(() => {
@@ -41,7 +48,7 @@ class FormValidator {
         //находим айди инпута который будет в таргете, чтобы связать его в дельнейшем со спаноп
         const inputId = input.id;
         //находим спан который привязан к нужному инпут таргету
-        const errorElement = document.querySelector(`#${inputId}-error`);
+        const errorElement = this._form.querySelector(`#${inputId}-error`);
         //проверяем инпут на валидность
         if (input.validity.valid) {
             //если инпут валиден, то удаляется красное подчёркивание и текст становится пустым
@@ -55,11 +62,9 @@ class FormValidator {
         }
     }
 
-    _addInpitListener = (form, config) => {
-        //находим инпуты внутри формы и делалаем их массивом
-        const inputList = Array.from(form.querySelectorAll(this._inputSelector));
+    _addInpitListener = (config) => {
         //на каждый инпут срабатывает вызов функции проверки валидации при вводе каждой буквы из-за ('input') 
-        inputList.forEach((item) => {
+        this._inputsList.forEach((item) => {
             item.addEventListener('input', (evt) => {
                 this._handleFormInput(evt, config);
             });
@@ -79,24 +84,34 @@ class FormValidator {
 
     //функция ресета красной обводки инпута при открытии попапа
     _resetBorderInput = () => {
-        const inputsList =  Array.from(document.querySelectorAll('.popup__input'));
-        inputsList.forEach((input) => {
+        this._inputsList.forEach((input) => {
           input.classList.remove(this._inputErrorClass);
         });
       };
 
     //функция ресета ошибок в span при открытии попапа
     _resetSpanError = () => {
-        const spanList = Array.from(document.querySelectorAll('.popup__error-input'));
-        spanList.forEach((span) => {
+        this._spanList.forEach((span) => {
         span.textContent = '';
         });
     };
-    
+
+    _disableButtonSubmit = () => {
+        this._buttonSubmit.classList.remove('popup__button-save_disabled');
+        this._buttonSubmit.disabled = false; 
+    }
+
+    disableButton = () => {
+        this._disableButtonSubmit();
+    }
+
+     resetValidation = () => {
+        this._resetBorderInput();
+        this._resetSpanError();
+    }; 
+
     enableValidation = (config) => {
         //вызов валидации
         this._validationConfig(this._form, config);
-        this._resetBorderInput();
-        this._resetSpanError();
     };
 }
