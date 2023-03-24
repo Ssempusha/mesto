@@ -97,7 +97,7 @@ class FormValidator {
     };
 
     _disableButtonSubmit = () => {
-        this._buttonSubmit.classList.remove('popup__button-save_disabled');
+        this._buttonSubmit.classList.remove(this._inactiveButtonClass);
         this._buttonSubmit.disabled = false; 
     }
 
