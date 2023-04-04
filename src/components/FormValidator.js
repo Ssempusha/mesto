@@ -1,15 +1,4 @@
-export { FormValidator, enableValidationConfig };
-
-const enableValidationConfig = {
-    formSelector: '.popup__form',
-    inputSelector: '.popup__input',
-    submitButtonSelector: '.popup__button-save',
-    inactiveButtonClass: 'popup__button-save_disabled',
-    inputErrorClass: 'popup__input_type_error',
-    spanSelector: '.popup__error-input',
-};
-
-class FormValidator {
+export default class FormValidator {
     constructor(form, config) {
         this._formSelector = config.formSelector;
         this._inputSelector = config.inputSelector;
@@ -105,7 +94,7 @@ class FormValidator {
         this._disableButtonSubmit();
     }
 
-     resetValidation = () => {
+    resetValidation = () => {
         this._resetBorderInput();
         this._resetSpanError();
     }; 

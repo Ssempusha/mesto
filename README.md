@@ -18,6 +18,7 @@
  * Функций JavaScript
  * Методологии БЭМ
  * ООП
+ * Webpack
  * Файловой структуры Nested
  * Тега template
  * Директивы media
