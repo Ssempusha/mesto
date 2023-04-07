@@ -16,7 +16,7 @@ export default class FormValidator {
         this._form = form;
     }
 
-    _toggleButton = (form, config) => {
+    _toggleButton = (form) => {
         //проверяем встроенной функцией валидна ли форма (тру/фолс)
         const ifFormValid = form.checkValidity();
         //если форма не валидна, то включаем ей дизейбл
@@ -57,16 +57,16 @@ export default class FormValidator {
     _validationConfig = (form, config) => {
         //делаем слушатель на toggleButton, чтобы он срабатывал не только при старте страницы, но и при событии 'input'
         form.addEventListener('input', () => {
-        this._toggleButton(form, config);
+        this._toggleButton(form);
         });
         //функция показывает или убирает текст ошибки
         this._addInpitListener(form, config);
         //изначальная проверка кнопки, иначе если юзер не повзаимодействует с формой, то кнопка будет такой, как изначально в html
-        this._toggleButton(form, config);
+        this._toggleButton(form);
         //при использовании в форме reset, сработает этот слушатель, чтобы задизейблить кнопку при повторном открытии попапа
         form.addEventListener('reset', () => {
             setTimeout(() => {
-                this._toggleButton(form, config);
+                this._toggleButton(form);
             }, 0); 
         });
     }
