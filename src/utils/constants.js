@@ -1,9 +1,7 @@
 export const profileOpenButton = document.querySelector('.profile__edit-button');
-export const profilePopup = document.querySelector('.popup');
+export const popupProfileSelector = '.popup';
 
 export const profileForm = document.forms.poputEdit;
-export const profileFormNameInput = profileForm.elements.userName;
-export const profileFormJobInput = profileForm.elements.userJob;
 
 export const profileName = document.querySelector('.profile__name');
 export const profileJob = document.querySelector('.profile__occupation');
@@ -15,13 +13,10 @@ export const formNewCard = document.forms.poputAdd;
 //вызываем из html template блок
 export const templateCard = document.querySelector('.template-card');
 
-export const popupOpenImage = document.querySelector('.popup_open-image');
+export const popupOpenImageSelector = '.popup_open-image';
 
 export const openPopupButtonAddingCard = document.querySelector('.profile__add-button');
-export const popupAddingCard = document.querySelector('.popup_addin-card');
-
-export const formNewCardPlaceInput = formNewCard.elements.placeName;
-export const formNewCardLinkInput = formNewCard.elements.linkImage;
+export const popupAddingCardSelector = '.popup_addin-card';
 
 export const initialCards = [
     {

@@ -7,72 +7,58 @@ import PopupWithForm from '../components/PopupWithForm.js';
 import UserInfo from '../components/UserInfo.js';
 import {
   profileOpenButton,
-  profilePopup,
+  popupProfileSelector,
   profileForm,
-  profileFormNameInput,
-  profileFormJobInput,
   profileName,
   profileJob,
   cardList,
   formNewCard,
   templateCard,
-  popupOpenImage,
+  popupOpenImageSelector,
   openPopupButtonAddingCard,
-  popupAddingCard,
-  formNewCardPlaceInput,
-  formNewCardLinkInput,
+  popupAddingCardSelector,
   initialCards,
   enableValidationConfig
 } from '../utils/constants.js';
 
-//назначаем классу попапы которые нужно валидировать и нужный конфиг
+
+//экземплары класса. назначаем классу попапы которые нужно валидировать и нужный конфиг
 const validationProfileForm = new FormValidator(profileForm, enableValidationConfig);
 const validationFormNewCard = new FormValidator(formNewCard, enableValidationConfig);
 
+//вызов валидации на формы
+validationProfileForm.enableValidation();
+validationFormNewCard.enableValidation();
+
 //объявляем переменную, которой мы назначили, с каким попапом будем работать внутри класса
-const popupPicture = new PopupWithImage(popupOpenImage);
+const popupPicture = new PopupWithImage(popupOpenImageSelector);
 //вызов функции из класса
 popupPicture.setEventListeners();
 
-//объявление наполнения страницы начальными карточками
-const renderInitialCards = new Section({
-  items: initialCards,
-  renderer: (cardData) => {
-    const card = new Card({
-      items: cardData,
-      handleCardClick: () => {
-        popupPicture.open(cardData);
-      },
-      }, templateCard);
-    renderInitialCards.addItem(card.createCard());
-  }
-}, cardList);
-//вызов метода
-renderInitialCards.renderItems();
 
-//объявление переменной, внутри которой функция добавления карточки. карточка сразу возвращается
-const renderCard = function (cardData) {
-  const renderCardItem = new Card({
+//функция добавления карточки. карточка сразу возвращается
+function renderCard(cardData) {
+  const card = new Card({
     items: cardData,
     handleCardClick: () => {
       popupPicture.open(cardData);
     },
     }, templateCard);
-  return renderCardItem.createCard();
+  const cardElement = card.createCard();
+  return cardElement;
 }
 
-//объявление попапа добавления новой карточки
-const popupAddCard = new PopupWithForm(popupAddingCard, {
-  submitCallback: () => {
-    renderInitialCards.addItem(renderCard({
-      name: formNewCardPlaceInput.value,
-      link: formNewCardLinkInput.value
-    }, templateCard, popupPicture));
-    popupAddCard.close();
-  }
-});
-//вызов метода, в котором присутствует submit
-popupAddCard.setEventListeners();
+const renderNewCard = (items) => {
+  renderInitialCards.addItem(renderCard(items));
+}
+
+//объявление наполнения страницы начальными карточками
+const renderInitialCards = new Section({
+  items: initialCards,
+  renderer: renderNewCard
+  }, cardList);
+//вызов метода
+renderInitialCards.renderItems();
 
 //переменные из профиля, передаваемые классу
 const openPopupProfile = new UserInfo({
@@ -80,28 +66,35 @@ const openPopupProfile = new UserInfo({
   elementJob: profileJob
 });
 
+const handleFormProfile = (input) => {
+  openPopupProfile.setUserInfo(input.userName, input.userJob);
+  popupEditeProfile.close();
+}
+
+const handleAddCard = (items) => {
+  renderNewCard(items);
+  popupAddCard.close();
+}
+
 //объявление попапа редактирования профиля
-const popupEditeProfile = new PopupWithForm(profilePopup, {
-  submitCallback: () => {
-  openPopupProfile.setUserInfo(profileFormNameInput, profileFormJobInput);
-  }
-});
+const popupEditeProfile = new PopupWithForm(popupProfileSelector, handleFormProfile);
+//вызов метода, в котором присутствует submit
 popupEditeProfile.setEventListeners();
 
-/* ----------вызов валидации на формы----------- */ 
-validationProfileForm.enableValidation();
-validationFormNewCard.enableValidation();
+//объявление попапа добавления новой карточки
+const popupAddCard = new PopupWithForm(popupAddingCardSelector, handleAddCard);
+//вызов метода, в котором присутствует submit
+popupAddCard.setEventListeners();
+
 
 /* ----------слушатели----------- */ 
 //вызываем функциию открытия попапа редактирования профиля 
 profileOpenButton.addEventListener('click', () => {
   popupEditeProfile.open();
-  //меняем у инпутов значения атрибутов value на новые, которые берутся из значений профиля
-  profileFormNameInput.setAttribute('value', openPopupProfile.getUserInfo().name);
-  profileFormJobInput.setAttribute('value', openPopupProfile.getUserInfo().job);
+  popupEditeProfile.setInputValues(openPopupProfile.getUserInfo());
   //вызов валидации
   validationProfileForm.resetValidation();
-  validationProfileForm.disableButton();
+  validationProfileForm.unDdisableButton();
 });
 
 //вызываем функциию открытия попапа добавления карточки 

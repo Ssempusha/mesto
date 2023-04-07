@@ -23,12 +23,6 @@ export default class FormValidator {
         this._buttonSubmit.disabled = !ifFormValid;
         //добавляем стиль дизейбла кнопке, если форма не валидна, и убираем, если не валидна
         this._buttonSubmit.classList.toggle(this._inactiveButtonClass, !ifFormValid);
-        //при использовании в форме reset, сработает этот слушатель, чтобы задизейблить кнопку при повторном открытии попапа
-        form.addEventListener('reset', () => {
-            setTimeout(() => {
-                this._toggleButton(form, config);
-            }, 0);
-        });
     }
 
     _handleFormInput = (evt) => {
@@ -69,6 +63,12 @@ export default class FormValidator {
         this._addInpitListener(form, config);
         //изначальная проверка кнопки, иначе если юзер не повзаимодействует с формой, то кнопка будет такой, как изначально в html
         this._toggleButton(form, config);
+        //при использовании в форме reset, сработает этот слушатель, чтобы задизейблить кнопку при повторном открытии попапа
+        form.addEventListener('reset', () => {
+            setTimeout(() => {
+                this._toggleButton(form, config);
+            }, 0); 
+        });
     }
 
     //функция ресета красной обводки инпута при открытии попапа
@@ -85,13 +85,13 @@ export default class FormValidator {
         });
     };
 
-    _disableButtonSubmit = () => {
+    _unDisableButtonSubmit = () => {
         this._buttonSubmit.classList.remove(this._inactiveButtonClass);
         this._buttonSubmit.disabled = false; 
     }
 
-    disableButton = () => {
-        this._disableButtonSubmit();
+    unDdisableButton = () => {
+        this._unDisableButtonSubmit();
     }
 
     resetValidation = () => {
