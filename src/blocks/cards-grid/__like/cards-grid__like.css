@@ -1,9 +1,9 @@
 .cards-grid__like {
-    width: 23px;
+    width: 24px;
     height: 19px;
     border: none;
     background: url('../../../images/like/like.png');
-    background-size: 22px 19px;
+    background-size: 23px 19px;
     background-position: center;
     background-repeat: no-repeat;
     cursor: pointer;

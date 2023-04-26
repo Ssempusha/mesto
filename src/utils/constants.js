@@ -1,8 +1,7 @@
 export const profileOpenButton = document.querySelector('.profile__edit-button');
+export const popupProfile = document.querySelector('.popup_profile-popup');
 export const popupProfileSelector = '.popup';
-
 export const profileForm = document.forms.poputEdit;
-
 export const profileName = document.querySelector('.profile__name');
 export const profileJob = document.querySelector('.profile__occupation');
 
@@ -13,38 +12,19 @@ export const formNewCard = document.forms.poputAdd;
 //вызываем из html template блок
 export const templateCard = document.querySelector('.template-card');
 
-export const popupOpenImageSelector = '.popup_open-image';
+export const openPopupEditAvatar = document.querySelector('.profile__avatar-edit');
+export const popupEditAvatar = document.querySelector('.popup_edit-avatar');
+export const popupEditAvatarSelector = '.popup_edit-avatar';
+export const formNewAvatar = document.forms.poputEditAvatar;
+export const profileAvatarImage = document.querySelector('.profile__avatar');
 
 export const openPopupButtonAddingCard = document.querySelector('.profile__add-button');
+export const popupAddingCard = document.querySelector('.popup_addin-card');
 export const popupAddingCardSelector = '.popup_addin-card';
 
-export const initialCards = [
-    {
-      name: 'Архыз',
-      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
-    },
-    {
-      name: 'Челябинская область',
-      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg'
-    },
-    {
-      name: 'Иваново',
-      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg'
-    },
-    {
-      name: 'Камчатка',
-      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg'
-    },
-    {
-      name: 'Холмогорский район',
-      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg'
-    },
-    {
-      name: 'Байкал',
-      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
-    }
-  ];
+export const popupDeleteCardConfirmSelector = '.popup_delete-card';
 
+export const popupZoomImageCardSelector = '.popup_open-image';
 
   export const enableValidationConfig = {
     formSelector: '.popup__form',

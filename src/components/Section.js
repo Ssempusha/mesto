@@ -1,6 +1,5 @@
 export default class Section {
-    constructor({ items, renderer }, containerSelector) {
-        this._items = items;
+    constructor({ renderer }, containerSelector) {
         this._renderer = renderer;
         this._container = containerSelector;
     }
@@ -11,9 +10,9 @@ export default class Section {
     }
 
     //вызываем функцию генерации карточек с нужными параметрами
-    renderItems() {
-        this._items.forEach((items) => {
-            this._renderer(items);
+    renderItems(items) {
+        items.forEach((item) => {
+            this._renderer(item);
         });
     }
 };
