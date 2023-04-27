@@ -1,5 +1,4 @@
 import './index.css';
-import renderLoading from '../utils/utils.js';
 import FormValidator from '../components/FormValidator.js';
 import Card from '../components/Card.js';
 import Section from '../components/Section.js';
@@ -11,7 +10,6 @@ import Api from '../components/Api.js';
 import {
   enableValidationConfig,
   profileOpenButton,
-  popupProfile,
   popupProfileSelector,
   profileForm,
   profileName,
@@ -22,12 +20,10 @@ import {
   templateCard,
   popupZoomImageCardSelector,
   openPopupButtonAddingCard,
-  popupAddingCard,
   popupAddingCardSelector,
   popupDeleteCardConfirmSelector,
   openPopupEditAvatar,
   popupEditAvatarSelector,
-  popupEditAvatar,
   profileAvatarImage
 } from '../utils/constants.js';
 let userId;
@@ -96,11 +92,12 @@ Promise.all([api.getUserInfo(), api.getInitialCards()])
 const popupWithConfirmation = new PopupWithConfirmation(popupDeleteCardConfirmSelector);
 popupWithConfirmation.setEventListeners();
 
-function handleDeleteCard(cardId, card) {
+function handleDeleteCard(card) {
+  const cardId = card.getCardId();
   popupWithConfirmation.setConfirmation(() => {
     api.deleteCardFromServer(cardId)
     .then(() => {
-      card.remove();
+      card.deleteCard();
       popupWithConfirmation.close();
     })
     .catch((err) => alert(err));
@@ -117,7 +114,7 @@ const handleFormEditProfile = (data) => {
   })
   .catch((err) => alert(err))
   .finally(() => {
-    renderLoading(false, popupProfile);
+    popupEditeProfile.renderLoading(false);
   });
 };
 
@@ -134,7 +131,7 @@ const handleAddCard = (items) => {
   })
   .catch((err) => alert(err))
   .finally(() => {
-    renderLoading(false, popupAddingCard);
+    popupAddCard.renderLoading(false);
   });
 };
 
@@ -146,7 +143,6 @@ popupAddCard.setEventListeners();
 
 //аватарка
 const handleNewAvatar = (data) => {
-  console.log(data);
   api
     .updateAvatar(data)
     .then((res) => {
@@ -155,7 +151,7 @@ const handleNewAvatar = (data) => {
     })
     .catch((err) => alert(err))
     .finally(() => {
-      renderLoading(false, popupEditAvatar);
+      popupEddAvatar.renderLoading(false);
     });
 };
 
@@ -165,7 +161,6 @@ popupEddAvatar.setEventListeners();
 
 //------лайки
 const handleLikeCard = (card, likes, userId, setLikes) => {
-  userId = card._userId;
   if (likes.some((userInfo) => userInfo._id === userId)) {
     api
       .dislikeCard(card.getCardId())
@@ -193,19 +188,19 @@ profileOpenButton.addEventListener('click', () => {
   validationProfileForm.resetValidation();
   validationProfileForm.unDdisableButton();
   //UX кнопки сохранения
-  renderLoading(true, popupProfile);
+  popupEditeProfile.renderLoading(true);
 });
 
 //вызываем функциию открытия попапа добавления карточки 
 openPopupButtonAddingCard.addEventListener('click', function () {
   popupAddCard.open();
   validationFormNewCard.resetValidation();
-  renderLoading(true, popupAddingCard);
+  popupAddCard.renderLoading(true);
 });
 
 //вызываем функциию открытия попапа изменения аватарки
 openPopupEditAvatar.addEventListener('click', function () {
   popupEddAvatar.open();
   validationAvatarForm.resetValidation();
-  renderLoading(true, popupEditAvatar);
+  popupEddAvatar.renderLoading(true);
 });

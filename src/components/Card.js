@@ -20,10 +20,18 @@ export default class Card {
         this._elementCardLike.classList.toggle('cards-grid__like_active');
     }
 
-    _deleteCard() {
+    deleteCard() {
         this._element.remove();
         this._element = null;
     }
+
+    getCardId = () => {
+        return this._cardId;
+    }; 
+
+    _blabla = () => {
+        this._handleDeleteCard(this);
+    };
 
     _updateLike = () => {
         this._handleLikeCard(this, this._likes, this._userId, (likes) => {
@@ -33,17 +41,13 @@ export default class Card {
         });
       };
 
-    getCardId = () => {
-        return this._cardId;
-    };
-
     _setEventListener() {
         this._elementCardLike.addEventListener('click', () => {
             this._updateLike();
         });
 
         this._elementCardDelete.addEventListener('click', () => {
-            this._handleDeleteCard(this._cardId, this._element);
+            this._blabla();
         });
 
         this._elementImageCard.addEventListener('click', () => {
