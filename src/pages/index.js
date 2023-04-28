@@ -114,7 +114,7 @@ const handleFormEditProfile = (data) => {
   })
   .catch((err) => alert(err))
   .finally(() => {
-    popupEditeProfile.renderLoading(false);
+    popupEditeProfile.renderLoading(false, "Сохранение...");
   });
 };
 
@@ -131,7 +131,7 @@ const handleAddCard = (items) => {
   })
   .catch((err) => alert(err))
   .finally(() => {
-    popupAddCard.renderLoading(false);
+    popupAddCard.renderLoading(false, "Сохранение...");
   });
 };
 
@@ -151,7 +151,7 @@ const handleNewAvatar = (data) => {
     })
     .catch((err) => alert(err))
     .finally(() => {
-      popupEddAvatar.renderLoading(false);
+      popupEddAvatar.renderLoading(false, "Сохранение...");
     });
 };
 
@@ -188,19 +188,19 @@ profileOpenButton.addEventListener('click', () => {
   validationProfileForm.resetValidation();
   validationProfileForm.unDdisableButton();
   //UX кнопки сохранения
-  popupEditeProfile.renderLoading(true);
+  popupEditeProfile.renderLoading(true, "Сохранить");
 });
 
 //вызываем функциию открытия попапа добавления карточки 
 openPopupButtonAddingCard.addEventListener('click', function () {
   popupAddCard.open();
   validationFormNewCard.resetValidation();
-  popupAddCard.renderLoading(true);
+  popupAddCard.renderLoading(true, "Создать");
 });
 
 //вызываем функциию открытия попапа изменения аватарки
 openPopupEditAvatar.addEventListener('click', function () {
   popupEddAvatar.open();
   validationAvatarForm.resetValidation();
-  popupEddAvatar.renderLoading(true);
+  popupEddAvatar.renderLoading(true, "Сохранить");
 });
