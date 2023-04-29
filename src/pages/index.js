@@ -107,14 +107,15 @@ function handleDeleteCard(card) {
 
 //редактирование данных профиля
 const handleFormEditProfile = (data) => {
+  popupEditeProfile.renderLoading("Сохранение...");
   api.setInfoProfile(data)
   .then((res) => {
     userInfo.setUserInfo(res);
-    popupEditeProfile.close();
+    //popupEditeProfile.close();
   })
   .catch((err) => alert(err))
   .finally(() => {
-    popupEditeProfile.renderLoading(false, "Сохранение...");
+    popupEditeProfile.renderLoading("Сохранить");
   });
 };
 
@@ -124,6 +125,7 @@ popupEditeProfile.setEventListeners();
 
 //добавление карточки
 const handleAddCard = (items) => {
+  popupAddCard.renderLoading("Сохранение...");
   api.createNewCard(items)
   .then((res) => {
     renderInitialCards.addItem(renderCard(res));
@@ -131,7 +133,7 @@ const handleAddCard = (items) => {
   })
   .catch((err) => alert(err))
   .finally(() => {
-    popupAddCard.renderLoading(false, "Сохранение...");
+    popupAddCard.renderLoading("Создать");
   });
 };
 
@@ -143,6 +145,7 @@ popupAddCard.setEventListeners();
 
 //аватарка
 const handleNewAvatar = (data) => {
+  popupEddAvatar.renderLoading("Сохранение...");
   api
     .updateAvatar(data)
     .then((res) => {
@@ -151,7 +154,7 @@ const handleNewAvatar = (data) => {
     })
     .catch((err) => alert(err))
     .finally(() => {
-      popupEddAvatar.renderLoading(false, "Сохранение...");
+      popupEddAvatar.renderLoading("Сохранить");
     });
 };
 
@@ -187,20 +190,16 @@ profileOpenButton.addEventListener('click', () => {
   //вызов валидации
   validationProfileForm.resetValidation();
   validationProfileForm.unDdisableButton();
-  //UX кнопки сохранения
-  popupEditeProfile.renderLoading(true, "Сохранить");
 });
 
 //вызываем функциию открытия попапа добавления карточки 
 openPopupButtonAddingCard.addEventListener('click', function () {
   popupAddCard.open();
   validationFormNewCard.resetValidation();
-  popupAddCard.renderLoading(true, "Создать");
 });
 
 //вызываем функциию открытия попапа изменения аватарки
 openPopupEditAvatar.addEventListener('click', function () {
   popupEddAvatar.open();
   validationAvatarForm.resetValidation();
-  popupEddAvatar.renderLoading(true, "Сохранить");
 });

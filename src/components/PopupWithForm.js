@@ -34,12 +34,8 @@ export default class PopupWithForm extends Popup {
         });
       }
 
-      renderLoading(loading, text) {
-        if (loading) {
+      renderLoading(text) {
           this._popup.querySelector(".popup__button-save").textContent = text;
-        } else {
-          this._popup.querySelector(".popup__button-save").textContent = text;
-        }
       }
 
       close() {
