@@ -111,7 +111,7 @@ const handleFormEditProfile = (data) => {
   api.setInfoProfile(data)
   .then((res) => {
     userInfo.setUserInfo(res);
-    //popupEditeProfile.close();
+    popupEditeProfile.close();
   })
   .catch((err) => alert(err))
   .finally(() => {
