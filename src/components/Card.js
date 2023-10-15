@@ -29,7 +29,7 @@ export default class Card {
         return this._cardId;
     }; 
 
-    _blabla = () => {
+    _deleteCardClick = () => {
         this._handleDeleteCard(this);
     };
 
@@ -47,7 +47,7 @@ export default class Card {
         });
 
         this._elementCardDelete.addEventListener('click', () => {
-            this._blabla();
+            this._deleteCardClick();
         });
 
         this._elementImageCard.addEventListener('click', () => {
